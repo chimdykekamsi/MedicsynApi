@@ -7,7 +7,6 @@ import cors from "cors";
 import morgan from "morgan";
 import connect from "./database/connection";
 import router from "./services";
-import deserialize from "./middleware/deserialize";
 import config from "./config";
 
 const app = express();
@@ -31,14 +30,14 @@ const swaggerDefinition = {
 const options = {
   swaggerDefinition,
   apis: [
-    "./src/routes/**/index.ts",
+    "./src/services/**/index.ts",
   ],
 };
 const swaggerSpec = swaggerJSDoc(options);
 
 var corOptions = {
   origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
   setHeaders: function (res: Response, path: string, stat: any) {
@@ -54,7 +53,6 @@ app.disable("x-powered-by");
 
 // Swagger UI setup
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use(deserialize);
 app.use("/api/v1", router);
 
 app.listen(port, () => {

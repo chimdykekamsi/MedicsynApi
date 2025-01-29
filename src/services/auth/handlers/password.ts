@@ -21,7 +21,7 @@ export const forgotPasswordHandler = async (req: Request, res: Response) => {
 
     const resetToken = crypto.randomBytes(32).toString("hex");
     existingUser.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-    existingUser.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000);
+    existingUser.passwordResetExpires = new Date(Date.now() + 5 * 60 * 1000);
     await existingUser.save();
 
     // implement email

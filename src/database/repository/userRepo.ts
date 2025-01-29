@@ -45,8 +45,8 @@ export default class UserRepo {
     });
   };
   
-  static findAll = async (limit: number, page: number) => {
-    return await UserModel.find()
+  static findAll = async (limit: number, page: number, filter: Object) => {
+    return await UserModel.find(filter)
     .skip((page - 1) * limit)
     .limit(limit);
   };

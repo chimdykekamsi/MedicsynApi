@@ -15,6 +15,7 @@
     "@types/swagger-ui-express": "^4.1.7",
     "argon2": "^0.41.1",
     "aws-sdk": "^2.1692.0",
+    "axios": "^1.7.9",
     "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

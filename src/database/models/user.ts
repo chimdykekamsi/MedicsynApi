@@ -44,6 +44,9 @@ import {
     @prop({default: false})
     emailVerified?: boolean;
   
+    @prop({default: true})
+    isActive?: boolean;
+  
     @prop()
     passwordResetToken?: string;
   
