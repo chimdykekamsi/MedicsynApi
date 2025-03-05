@@ -14,7 +14,7 @@ const createMedicationHandler = async (
     const medication = await MedicationRepo.createMedication(medicationData);
 
     return APIResponse.success(
-      "We've added your medication. Sit back and wait for reminders.",
+      "We've added your medication",
       { medication },
       201
     ).send(res);

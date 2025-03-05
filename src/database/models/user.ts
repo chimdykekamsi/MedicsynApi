@@ -46,7 +46,10 @@ import {
   
     @prop({default: true})
     isActive?: boolean;
-  
+    
+    @prop({ required: true})
+    timeZone!: string;
+
     @prop()
     passwordResetToken?: string;
   
