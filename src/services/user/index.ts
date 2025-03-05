@@ -31,8 +31,8 @@ userRoutes
 userRoutes
   .route("/:userId")
   .get(
-    authenticateUser,
-    hasPerm("admin", "user"),
+    // authenticateUser,
+    // hasPerm("admin", "user"),
     findUserByIdHandler
   );
 

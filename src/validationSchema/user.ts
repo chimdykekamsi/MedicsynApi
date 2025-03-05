@@ -9,7 +9,7 @@ export const createUserSchema = object({
     password: string({
       required_error: " Password is required",
     })
-      .min(8, "Password should not be less than 8")
+      .min(8, "Password should not be less than 8 character")
       .regex(
         /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*./%|?><]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
         {

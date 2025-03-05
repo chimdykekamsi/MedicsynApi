@@ -1,0 +1,533 @@
+
+
+
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Medicsyn App",
+        "description": "medical adherence app"
+    },
+    "server":[
+        {
+            "url":"http://localhost:3000",
+            "description":"Developemt server"
+        },
+        {
+            "url":"http://localhost:5500",
+            "description":"Client server"
+        }
+    ],
+
+    "paths":{
+        "/api/v1/users/":{
+            "post":{
+                "summary":"signup",
+                "tags":["SignupRout"],
+                "requestBody":{
+                    "description":"Create an account to have full access",
+                    "required": true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "name":{
+                                        "type":"string",
+                                        "required": true, 
+                                        "required_error":"name is required",
+                                        "example":"John Doe"
+                                    },
+
+                                    "password":{
+                                        "type":"string",
+                                        "required": true, 
+                                        "required_error":"password is required",
+                                        "minLength":[8, "password should be at least 8 characters"],
+                                        "example":"johnDoe123_#"
+                                    },
+
+                                    "email":{
+                                        "type":"string",
+                                        "required": true,
+                                        "required_error":"Email is required",
+                                        "example":"jojndoe@gmail.com"
+                                    },
+
+                                    "phoneNumber":{
+                                        "type":"string",
+                                        "example": "07080472950",
+                                        "optional": true
+                                    },
+
+                                    "role":{
+                                        "type":"string",
+                                        "optional": true,
+                                        "example":"Admin, user, manager",
+                                        "default": "user"
+                                    },
+
+                                    "condition":{
+                                        "type": "string",
+                                        "optional": true,
+                                        "example": "Fever"
+                                    },
+
+                                    "profile_url":{
+                                        "type":"string",
+                                        "optional": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "201":{
+                        "description": "User succssully created"
+                    },
+                    "400":{
+                        "description":"Bad request"
+                    },
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            },
+
+            "get":{
+                "summary":"view all registered users",
+                "tags":["getUsersRoute"],
+                "description": "View all the successful registered users",
+                "responses":{
+                    "200":{
+                        "description":"Success"
+                    },
+                    "401":{
+                        "description": "Unauthorized"
+                    },
+                    "404":{
+                        "description":"Not found"
+                    },
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            }
+        },
+
+        "/api/v1/auth/login":{
+            "post":{
+                "summary":"Login",
+                "tags":["loginRoute"],
+                "requestBody":{
+                    "description":"this route is for login only",
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "password":{
+                                        "type":"string",
+                                        "required":true,
+                                        "required_error":"password is required"
+                                    },
+
+                                    "email":{
+                                        "type":"string",
+                                        "required":true,
+                                        "required_error":"Email is required"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"Login successful"
+                    },
+
+                    "400":{
+                        "description":"Inavlid email or password"
+                    },
+
+                    "404":{
+                        "description":"User not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            }
+        },
+
+        "/api/v1/auth/refresh-token":{
+            "post":{
+                "summary":"This route is used for refresh token",
+                "tags":["refreshTokenRoute"],
+                "requestBody":{
+                    "description":"This endpoint allows you to refresh your access token.",
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "refreshToken":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                
+                "responses":{
+                    "200":{
+                        "description":"Access token refreshed"
+                    },
+                    "400":{
+                        "description":"Refresh token is required"
+                    },
+                    "401":{
+                        "description":"Invalid refresh token"
+                    },
+                    "404":{
+                        "description":"User with this email is not exist"
+                    }
+                }
+            }
+        },
+
+
+        "/api/v1/auth/forgot-password":{
+            "post":{
+                "summary":"Forgot password route",
+                "tags":["forgotPasswordRoute"],
+                "requestBody":{
+                    "description":"This route is used to generate another password",
+                    "required": true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string",
+                                        "required":true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"success"
+                    },
+                    "400":{
+                        "description":"Email is reuired"
+                    },
+
+                    "404":{
+                        "description":"User not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            }
+        },
+
+
+        "/api/v1/auth/reset-password":{
+            "post":{
+                "summary":"reset password route",
+                "tags":["resetPasswordRoute"],
+                "requestBody":{
+                    "description":"This route is for reset password only",
+                    "required": true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "token":{
+                                        "type":"string",
+                                        "required":true,
+                                        "required_error":"token is rquired"
+                                    },
+                                   "newPassword":{
+                                    "type":"string",
+                                    "required":true,
+                                    "minLength": 8,
+                                    "required_error":"New password is required"
+                                   } 
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"Password reset successful"
+                    },
+
+                    "400":{
+                        "description":"Invalid or expired token"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            }
+        },
+
+        "/api/v1/users/{userId}":{
+            "get":{
+                "summary":"Retrieve use by ID",
+                "tags":["retrieveUserById"],
+                "description":"This route is for retrirving a single user by ID",
+                "produces":[ "application/json"],
+             
+                "parameters": [
+                    {
+                      "name": "userId",
+                      "in": "path",
+                      "required": true,
+                      "type":"string",
+                      "description": "The unique identifier of the user."
+
+                    }
+                ],
+
+                "responses":{
+                    "200":{
+                        "description":"Success"
+                    },
+
+                    "400":{
+                        "description":"Bad Request"
+                    },
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "404":{
+                        "description":"User not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                    
+                }
+            }
+        },
+
+       
+
+        "/api/v1/users/profile":{
+            "patch":{
+                "summary":"Update user profile",
+                "tags":["updateProfieRoute"],
+                "requestBody":{
+                    "description":"This route is for updating the user profile",
+                    "required": true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "phoneNumber":{
+                                        "type":"string",
+                                        "required":true,
+                                        "maxLength":[11, "Phone number should not be greater than 11"],
+                                        "example":"07080472950"
+                                    },
+
+                                    "condition":{
+                                        "type":"string",
+                                        "optional":true,
+                                        "example":"Fever"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"Success"
+                    },
+
+                    "400":{
+                        "description":"Old password is incorrect"
+                    },
+
+                    "404":{
+                        "description":"Not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            }
+        },
+
+        "/api/v1/users/change-password":{
+            "patch":{
+                "summary":"change password",
+                "tags":["changePasswordRoute"],
+                "requestBody":{
+                    "description":"this route is used for password reset only",
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "oldPassword":{
+                                        "type":"string",
+                                        "required":true,
+                                        "required_error": "Old password is required",
+                                        "example":"johnDoe123_#"
+                                    },
+
+                                    "newPassword":{
+                                        "type":"string",
+                                        "required": true,
+                                        "required_error":"New password is required",
+                                        "minLength":[8, "New password should be at least 8 characters"],
+                                        "example":"johnDoe12_#"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"Success"
+                    },
+
+                    "400":{
+                        "description":"Old password not correct"
+                    },
+
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "404":{
+                        "description":"User not found"
+                    },
+                    "500":{
+                        "description": "server error"
+                    }
+                }
+            }
+        },
+
+
+        "/api/v1/users/upload-profile-image": {
+            "patch": {
+              "summary":"upload profile picture",
+              "tags":["uploadProfilePictureRoute"],
+              "description":"This route is used for profile picture upload only",
+              "requestBody": {
+                "content": {
+                  "multipart/form-data": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "file": {
+                            "type": "string",
+                            "format": "binary"
+                          
+                        }
+                      },
+                      "required": ["file"]
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Files uploaded successfully"
+                },
+                "400": {
+                  "description": "Bad Request"
+                },
+                "401":{
+                    "description":"Access token required"
+                },
+                "500": {
+                  "description": "Server Error"
+      
+                }
+              }
+            }
+          },
+
+
+          "/api/v1/auth/email/request-verification":{
+            "post":{
+                "summary":"Route to request for email verification",
+                "tags":["emailVerificationRoute"],
+                "requestBody":{
+                    "description":"This route is use for email verification only.",
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string",
+                                        "required":true,
+                                        "required_error":"Email is required"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"success"
+                    },
+
+                    "400":{
+                        "description":"verification token is required "
+                    },
+
+                    "401":{
+                        "description":"Invalid or expired token"
+                    },
+
+                    "404":{
+                        "description":"User with this email does not exist"
+                    }
+                }
+            }
+          }
+
+
+    }
+
+
+}

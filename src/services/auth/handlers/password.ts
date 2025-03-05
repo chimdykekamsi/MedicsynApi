@@ -30,7 +30,7 @@ export const forgotPasswordHandler = async (req: Request, res: Response) => {
     const message = "Click the link below to reset your password";
     await sendMail(email,subject,message,resetUrl);
 
-    return APIResponse.success("Password reset token sent to email", undefined, 200).send(res);
+    return APIResponse.success("Password reset token sent to your email", undefined, 200).send(res);
   } catch (error) {
     return APIResponse.error((error as Error).message, 500).send(res);
   }
