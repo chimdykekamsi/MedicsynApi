@@ -5,7 +5,7 @@ export const hasPerm = (...allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       if (!allowedRoles.includes(res.locals.user.role)) {
-       return APIResponse.error("Permission denied", 403).send(res);
+       return APIResponse.error("You dont have the permission to perform this task", 403).send(res);
       }
       next();
     } catch (error) {

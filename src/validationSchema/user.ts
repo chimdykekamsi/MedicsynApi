@@ -1,31 +1,35 @@
-import { object, optional, string, TypeOf, z } from "zod";
+import { object, string, TypeOf, z } from "zod";
+
 
 export const createUserSchema = object({
   body: object({
     name: string({
-      required_error: " Name is required",
+      required_error: "Name is required",
     }),
-
     password: string({
-      required_error: " Password is required",
+      required_error: "Password is required",
     })
       .min(8, "Password should not be less than 8 character")
       .regex(
         /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*./%|?><]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
         {
           message:
-            "Password must contain uppercase letter, lowercase letter, a number and any of (!@#$%^&*./%|?><)",
+            "Password must contain uppercase letter, lowercase letter, a number, and a special character (!@#$%^&*./%|?><)",
         }
       ),
     email: string({
       required_error: "Email is required",
     }).email("Not a valid Email"),
+    timeZone: string({
+      required_error: "TimeZone is required",
+    }),
     phoneNumber: string().length(11).optional(),
     role: z.enum(["admin", "user", "manager"]).optional(),
     condition: string().optional(),
-    profile_url: string().optional()
+    deviceToken: string().optional(),
   }),
 });
+
 export type createUserInput = TypeOf<typeof createUserSchema>["body"];
 
 export const loginSchema = object({
@@ -45,7 +49,8 @@ export const updateProfileSchema = object({
     phoneNumber: string()
       .regex(/^\d{11}$/, "Phone number must be 11 digits")
       .optional(),
-    condition: string().optional(),
+    condition: string().optional(),    
+    deviceToken: string().optional()
   }),
 });
 export type UpdateProfileInput = typeof updateProfileSchema._type["body"];

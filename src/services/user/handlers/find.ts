@@ -12,7 +12,7 @@ const findAllUsersHandler = async (req: Request, res: Response) => {
     const pageNum = Math.max(1, Number(page)); // Ensure page is at least 1
 
     // Fetch users and total count
-    const users = await UserRepo.findAll(limitNum, pageNum); // Assumes this returns paginated results
+    const users = await UserRepo.findAll(limitNum, pageNum, {}); // Assumes this returns paginated results
     const totalUsers = await UserRepo.countUsers(); // Fetch total number of users
 
     if (!users || users.length === 0) {

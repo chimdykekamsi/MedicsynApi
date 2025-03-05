@@ -6,7 +6,7 @@ export default class JWTRepo {
     user: Omit<User, "__v" | "password" | "verifyPassword">
   ) => {
     const accessToken = signjwt(user, "accessTokenPrivateKey", {
-      expiresIn: "20m",
+      expiresIn: "1h",
     });
     return accessToken;
   };

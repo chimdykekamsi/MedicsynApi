@@ -44,6 +44,12 @@ import {
     @prop({default: false})
     emailVerified?: boolean;
   
+    @prop({default: true})
+    isActive?: boolean;
+    
+    @prop({ required: true})
+    timeZone!: string;
+
     @prop()
     passwordResetToken?: string;
   

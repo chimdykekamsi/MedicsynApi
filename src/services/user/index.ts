@@ -1,11 +1,12 @@
 import { Router } from "express";
 import createUserHandler from "./handlers/create";
 import findAllUsersHandler from "./handlers/find";
-import { findUserByIdHandler } from "./handlers/findOne";
+import { findUserByIdHandler, suspendOrActivateUserHandler } from "./handlers/id";
 import { uploadProfileImageHandler, changePasswordHandler, updateProfileHandler } from "./handlers/update";
 import authenticateUser from "../../middleware/authenticateUser";
 import validate from "../../middleware/validate";
 import { hasPerm } from "../../middleware/permission";
+import deserialize from "../../middleware/deserialize";
 import { createUserSchema, updateProfileSchema, changePasswordSchema } from "../../validationSchema/user";
 import multer from "multer";
 
@@ -21,9 +22,10 @@ userRoutes
     validate(createUserSchema),
     createUserHandler
   )
-  .get(
+  .get(    
+    deserialize,
     authenticateUser,
-    hasPerm("admin", "user"),
+    // hasPerm("admin"),
     findAllUsersHandler
   );
 
@@ -31,8 +33,9 @@ userRoutes
 userRoutes
   .route("/:userId")
   .get(
-    // authenticateUser,
-    // hasPerm("admin", "user"),
+    deserialize,
+    authenticateUser,
+    hasPerm("admin", "user"),
     findUserByIdHandler
   );
 
@@ -40,6 +43,7 @@ userRoutes
 userRoutes
   .route("/profile")
   .patch(
+    deserialize,
     authenticateUser,
     validate(updateProfileSchema),
     updateProfileHandler
@@ -49,6 +53,7 @@ userRoutes
 userRoutes
   .route("/change-password")
   .patch(
+    deserialize,
     authenticateUser,
     validate(changePasswordSchema),
     changePasswordHandler
@@ -58,9 +63,18 @@ userRoutes
 userRoutes
   .route("/upload-profile-image")
   .patch(
+    deserialize,
     authenticateUser,
-    upload.single("image"), // Use multer to handle the image upload
+    upload.single("image"),
     uploadProfileImageHandler
   );
+
+userRoutes
+  .post("/:userId/suspend-activate",
+    deserialize,
+    authenticateUser,
+    hasPerm("admin"),
+    suspendOrActivateUserHandler
+  )
 
 export default userRoutes;
