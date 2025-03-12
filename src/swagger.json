@@ -23,7 +23,7 @@
         "/api/v1/users/":{
             "post":{
                 "summary":"signup",
-                "tags":["SignupRout"],
+                "tags":["SignupRoute"],
                 "requestBody":{
                     "description":"Create an account to have full access",
                     "required": true,
@@ -54,29 +54,27 @@
                                         "example":"jojndoe@gmail.com"
                                     },
 
+                                    "timeZone":{
+                                        "type":"string",
+                                        "required":true,
+                                        "required_error":"Time zone is required",
+                                        "example":"West Africa time"
+                                    },
+
                                     "phoneNumber":{
                                         "type":"string",
                                         "example": "07080472950",
                                         "optional": true
                                     },
 
-                                    "role":{
-                                        "type":"string",
-                                        "optional": true,
-                                        "example":"Admin, user, manager",
-                                        "default": "user"
-                                    },
 
                                     "condition":{
                                         "type": "string",
                                         "optional": true,
                                         "example": "Fever"
-                                    },
-
-                                    "profile_url":{
-                                        "type":"string",
-                                        "optional": true
                                     }
+
+
                                 }
                             }
                         }
@@ -524,7 +522,491 @@
                     }
                 }
             }
-          }
+        },
+
+
+
+        "/api/v1/medications/":{
+            "post":{
+                "summary":"This route is used to create a medication",
+                "tags":["createMedicationRoute"],
+                "requestBody":{
+                    "description":"this route is used to create a medications, days Interval, daily schedules",
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "name":{
+                                        "type":"string",
+                                        "required_error":"name is required",
+                                        "required":true
+                                    },
+
+                                    "dosage":{
+                                        "type":"string",
+                                        "required_error":"dosage is required",
+                                        "required": true
+                                    },
+
+                                    "daysInterval":{
+                                        "type": "number",
+                                        "required_error":"days interval is required",
+                                        "required":true
+                                    },
+
+
+                                    "dailySchedule":{
+                                        "type":"array",
+                                        "items":{
+                                            "type":"string",
+                                            "required_error":"daily schedule is required",
+                                            "required": true,
+                                            "example": "08:30"
+                                        }
+                                    },
+
+                                    "prescription":{
+                                        "type":"string",
+                                        "required_error":"prescription is required",
+                                        "required": true
+                                    },
+
+                                    "message":{
+                                        "type":"string",
+                                        "required":false,
+                                        "optional":true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "201":{
+                       "description":"Medication created"
+                    },
+
+                    "400":{
+                        "description":"Unauthorized"
+                    },
+
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "404":{
+                        "description":"User not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            },
+
+            "get":{
+                "summary":"fetch all medications",
+                "tags":["getAllMedications"],
+                "description":"this route is used to fetch all the user medications",
+                "responses":{
+                    "200":{
+                        "description":"success"
+                    },
+
+                    "400":{
+                        "description":"unauthenticated user"
+                    }, 
+
+                   "401":{
+                       "description":"Access token required"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                    
+                }
+            }
+        },
+
+
+        "/api/v1/medications/{mdId}":{
+            "patch":{
+                "summary":"update medications route",
+                "tags":["updateMedicationsRoute"],
+                "parameters":[
+                    {
+                        "name":"medId",
+                        "in":"path",
+                        "required":true,
+                        "description":"The ID of the medication to update",
+                        "schema":{
+                            "type":"string"
+                        }
+                    }
+                ],
+                "requestBody":{
+                    "description":"This route is used to update the medications route",
+
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "name":{
+                                        "type":"string",
+                                        "optional":true
+                                    },
+
+                                    "dosage":{
+                                        "type":"string",
+                                        "optional":true
+                                    },
+
+                                    "daysInterval":{
+                                        "type":"number"
+                                    },
+
+                                    "dailySchedule":{
+                                        "type":"array",
+                                        "items":{
+                                            "type":"string",
+                                            "required":true,
+                                            "example": "08: 30pm"
+                                        }
+                                    },
+
+                                    "prescription":{
+                                        "type":"string",
+                                        "optional":true
+                                    },
+
+                                    "message":{
+                                        "type":"string",
+                                        "optional":true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"success"
+                    },
+                    "400":{
+                        "description":"Bad request"
+                    },
+
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "403":{
+                        "description":"Unauthorized"
+                    },
+
+                    "404":{
+                        "description":"Not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            },
+
+
+            "get":{
+                "summary":"Find Medication by the medication  ID",
+                "tags":["getMedicationByMedicationIdRoute"],
+                "produces":["application/json"],
+                "parameters":[
+                    {
+                        "name": "medId",
+                        "in": "path",
+                        "required": true,
+                        "type":"string",
+                        "description": "The unique identifier of the medication."
+  
+                      }
+                ],
+
+                "responses":{
+                    "200":{
+                        "description":"Success"
+                    },
+
+                    "400":{
+                        "description":"Bad Request"
+                    },
+                    "403":{
+                        "description":"Access token refreshed"
+                    },
+
+                    "404":{
+                        "description":"Medication not found"
+                    },
+
+                    "500":{
+                        "description":"Server Error"
+                    }
+                }
+            },
+
+            "delete":{
+                "summary":"Delet medication by medication ID",
+                "tags":["deleteMedicationByMedicationId"],
+
+                "description": "Deletes the medication resource identified by the given `medId` parameter.",
+                "parameters":[
+                    {
+                        "name":"medId",
+                        "in":"path",
+                        "required":true,
+                        "schema":{
+                            "type":"string"
+                        }
+                    }
+               ],
+
+               "responses":{
+                "200":{
+                    "description":"Medication deleted successfully"
+                },
+
+                "400":{
+                    "description":"Access token required"
+                },
+
+                "401":{
+                    "description":"Unauthorized"
+                },
+
+                "403":{
+                    "description":"Not authenticated user"
+                },
+
+                "404":{
+                    "description":"Not found"
+                },
+                "500":{
+                    "description":"server error"
+                }
+               }
+
+             }
+        },
+
+
+        "/api/v1/notifications/add-medication":{
+            "post":{
+                "summary":"Add medication to a user",
+                "tags":["addMedicationForAUser"],
+                "parameters":[],
+                "requestBody":{
+                    "description":"This route is used to add a medication to a user",
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "medId":{
+                                        "type":"string",
+                                        "description":"The ID of the medication to be added"
+                                    },
+
+                                    "startToday":{
+                                        "type":"boolean",
+                                        "description":"Determine whether notification should start today or not"
+                                    }
+                                },
+
+                                "required":["medId"]
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"Success"
+                    },
+
+                    "400":{
+                        "description":"Bad Request"
+                    },
+
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "403":{
+                        "description":"unauthenticated user"
+                    },
+
+                    "404":{
+                        "description":"Medication not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+            }
+        },
+
+
+        "/api/v1/notifications/subscribe":{
+            "post":{
+                "summary":"subscribe a notification to a user by the user ID and timezone",
+                "tags":["subscribeNotificationRoute"],
+                "requestBody":{
+                    "description":"this route is used to subscribe a notification to a user by an authenticated user",
+                    "required":true,
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "newSubscription":{
+                                        "type":"array",
+                                        "items":{
+                                            "type":"string",
+                                            "required":true,
+                                            "example": "08: 30pm"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "responses":{
+                    "200":{
+                        "description":"User subscribed successful"
+                    },
+                    "400":{
+                        "description":"subscriptio is required"
+                    },
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "403":{
+                        "description":"unauthenticated user"
+                    },
+
+                    "404":{
+                        "description":"User Id and Timezonw not found"
+                    },
+
+                    "500":{
+                        "description":"server error"
+                    }
+                }
+
+               
+               
+               
+            }
+            
+        } ,
+
+        "/api/v1/notifications/send-notification": {
+            "get": {
+                "summary": "Get Medication Notifications",
+                "description": "Sends medication reminders to a subscribed user based on the specified time.",
+                "tags": ["getNotificationsRoute"],
+                "parameters": [
+                    {
+                        "name": "time",
+                        "in": "query",
+                        "description": "Time in HH:mm format to fetch medications for notifications. Defaults to 00:00 if not provided.",
+                        "required": false,
+                        "schema": {
+                        "type": "string",
+                        "example": "09:30"
+                        }
+                    }
+                ],
+
+                "responses":{
+                    "200":{
+                        "description":"Notification sent successful"
+                    },
+
+                    "400":{
+                        "description":"Bad Request"
+                        
+                    },
+
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "403":{
+                        "description":"unauthenticated user"
+                    },
+                    "500":{
+                        "description":"Server Error"
+                    }
+                }
+        
+            }
+        },
+
+
+        "/api/v1/notifications/get-schedule": {
+            "get": {
+                "summary": "Get Medication schedule Notifications",
+                "description": "Sends medication reminders to a subscribed user based on the specified time.",
+                "tags": ["getNotificationsRoute"],
+                "parameters": [
+                    {
+                        "name": "time",
+                        "in": "query",
+                        "description": "Time in HH:mm format to fetch medications for notifications. Defaults to 00:00 if not provided.",
+                        "required": false,
+                        "schema": {
+                        "type": "string",
+                        "example": "09:30"
+                        }
+                    }
+                ],
+
+                "responses":{
+                    "200":{
+                        "description":"Notification sent successful"
+                    },
+
+                    "400":{
+                        "description":"Bad Request"
+                        
+                    },
+
+                    "401":{
+                        "description":"Access token required"
+                    },
+
+                    "403":{
+                        "description":"unauthenticated user"
+                    },
+                    "500":{
+                        "description":"Server Error"
+                    }
+                }
+        
+            }
+        }
+        
 
 
     }

@@ -13,7 +13,7 @@ import * as path from 'path'; // for exposing the swagger json path
 import http from "http";
 
 const app = express();
-const server = http.createServer(app);
+const server = http.createServer(app)
 
 
 const port = config.PORT;
