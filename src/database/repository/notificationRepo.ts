@@ -1,6 +1,6 @@
 import { DocumentType } from "@typegoose/typegoose";
 import NotificationModel, { Notification } from "../models/notification";
-import moment from "moment";
+import moment from "moment"; //need to install this package later after fixing merge conflict
 
 export default class NotificationRepo {
   /**
@@ -108,13 +108,13 @@ export default class NotificationRepo {
       return null;
     }
     
-    const today = moment().startOf('day');
+     const today = moment().startOf('day');//please don't forget to uncomment this code after installing momemt
     
     const matchingMedications = notification.medications.filter(medication => {
       if (!medication.lastNotified) return false;
-      const lastNotifiedDate = moment(medication.lastNotified).startOf('day');
-      const nextDueDate = lastNotifiedDate.add(medication.daysInterval, 'days');
-      return medication.dailySchedule.includes(currentTime) && today.isSameOrAfter(nextDueDate);
+       const lastNotifiedDate = moment(medication.lastNotified).startOf('day');//remember to uncomment this code after installing moment
+       const nextDueDate = lastNotifiedDate.add(medication.daysInterval, 'days');//samething to do here
+       return medication.dailySchedule.includes(currentTime) && today.isSameOrAfter(nextDueDate);//samething to do here
     });
 
     return matchingMedications.length > 0 ? matchingMedications : null;

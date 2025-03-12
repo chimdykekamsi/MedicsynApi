@@ -1,4 +1,4 @@
-import webpush from "web-push";
+ import webpush from "web-push"; //remember to install this package later after fixing merge conflict
 import NotificationRepo from "../database/repository/notificationRepo";
 
 // VAPID Keys
@@ -8,7 +8,7 @@ const vapidKeys = {
 };
 
 // Setting up VAPID details
-webpush.setVapidDetails("mailto:myuserid@email.com", vapidKeys.publicKey, vapidKeys.privateKey);
+ webpush.setVapidDetails("mailto:myuserid@email.com", vapidKeys.publicKey, vapidKeys.privateKey);//remeber to uncomment this after installing the page
 
 /**
  * Sends push notifications to all subscribed devices for a user.
@@ -23,7 +23,7 @@ const sendNotificationsToUser = async (userId: string, payload: string) => {
     const validSubscriptions = [];
     for (const subscription of userNotification.subscription) {
         try {
-            await webpush.sendNotification(subscription, payload);
+             await webpush.sendNotification(subscription, payload);//remember to uncomment this after insalling the package
             validSubscriptions.push(subscription); // Keep valid subscriptions
         } catch (error: any) {
             console.error("Error sending notification:", error);

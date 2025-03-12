@@ -24,7 +24,8 @@ export const loginHandler = async (req: Request<{}, {}, loginInput>, res: Respon
 
       return APIResponse.success(
         "Login successful",
-        { accessToken, refreshToken, ...formatResponseRecord(rest) },
+        // { accessToken, refreshToken, ...formatResponseRecord(...rest) },
+        { accessToken, refreshToken }, //This code returns only the accessToken and refreshToken when a user logs in 
         200
       ).send(res);
     }
